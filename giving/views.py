@@ -2,7 +2,14 @@ from django.http.response import HttpResponse
 
 from django.template import Context, loader
 
+from notifications.signals import notify
+
 from .models import Charity, Donor, Donation
+
+from django.contrib.auth import get_user
+
+from django.views.decorators.csrf import csrf_exempt
+
 
 def index(request):
     template = loader.get_template('giving/home.html')
@@ -35,7 +42,17 @@ def donation_list_view(request):
     return HttpResponse(output)
 
 
+@csrf_exempt
 def new_donation_view(request):
+    user = get_user(request)
+
+    if request.method == 'POST':
+        notify.send(user, recipient=user, verb='Submitted donation')
+        if request.POST['amount'] > 100:
+            notify.send(user, recipient=user, verb='Big donation - send thank you email')
+    else:
+        notify.send(user, recipient=user, verb='Started creation of donation')
+
     charity_list = Charity.objects.all()
     template = loader.get_template('giving/new_donation.html')
     context = Context({'charity_list': charity_list})
