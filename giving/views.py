@@ -2,6 +2,8 @@ from django.http.response import HttpResponse
 
 from django.template import Context, loader
 
+from django.shortcuts import redirect
+
 from notifications.signals import notify
 
 from .models import Charity, Donor, Donation
@@ -50,6 +52,7 @@ def new_donation_view(request):
         notify.send(user, recipient=user, verb='Submitted donation')
         if request.POST['amount'] > 100:
             notify.send(user, recipient=user, verb='Big donation - send thank you email')
+        return redirect("/giving/")
     else:
         notify.send(user, recipient=user, verb='Started creation of donation')
 
