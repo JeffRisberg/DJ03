@@ -1,3 +1,10 @@
+{% extends parent_template|default:"base.html" %}
+
+{% block title %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
 <img src="/static/giving/images/background.jpg"/>
 
 <h2>Hello, Welcome to the Giving Application</h2>
@@ -18,3 +25,4 @@
         </td>
     </tr>
 </table>
+{% endblock %}

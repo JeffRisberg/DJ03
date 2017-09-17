@@ -1,4 +1,10 @@
+{% extends parent_template|default:"base.html" %}
 
+{% block title %}
+{{ block.super }} - Donor List
+{% endblock %}
+
+{% block content %}
 <img src="/static/giving/images/background.jpg" />
 
 <h2>Donor List</h2>
@@ -24,3 +30,4 @@
     </tr>
     {% endfor %}
 </table>
+{% endblock %}

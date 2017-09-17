@@ -1,3 +1,10 @@
+{% extends parent_template|default:"base.html" %}
+
+{% block title %}
+{{ block.super }} - Donation List
+{% endblock %}
+
+{% block content %}
 <img src="/static/giving/images/background.jpg"/>
 
 <h2>Donation List</h2>
@@ -27,3 +34,4 @@
 </table>
 
 <a href="/giving/newDonation">New Donation</a>
+{% endblock %}
