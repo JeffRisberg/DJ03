@@ -63,6 +63,8 @@ def new_donation_view(request):
         donation = Donation(donor=user, amount=int(request.POST['amount']), charity=charity)
         donation.save()
         return redirect("/giving/")
+    else:
+        notify.send(user, recipient=user, verb='Started creation of donation')
 
     charity_list = Charity.objects.all()
     c.update({'charity_list': charity_list})
