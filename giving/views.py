@@ -1,16 +1,11 @@
+from django.core.context_processors import csrf
 from django.http.response import HttpResponse
-
+from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
-
-from django.shortcuts import redirect, render
 
 from notifications.signals import notify
 
 from .models import Charity, Donor, Donation
-
-from django.contrib.auth import get_user
-
-from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -44,17 +39,31 @@ def donation_list_view(request):
     return HttpResponse(output)
 
 
+def donation_list_view(request):
+    donation_list = Donation.objects.all()
+    template = loader.get_template('giving/donation_list.html')
+    context = Context({'donation_list': donation_list})
+    output = template.render(context)
+    return HttpResponse(output)
+
+
 def new_donation_view(request):
-    user = get_user(request)
+    c = {}
+    c.update(csrf(request))
+    user = getattr(request, "user", None)
 
     if request.method == 'POST':
         notify.send(user, recipient=user, verb='Submitted donation')
         if int(request.POST['amount']) > 100:
             notify.send(user, recipient=user, verb='Big donation - send thank you email')
+
+        id = int(request.POST['charity'])
+        charity = Charity.objects.get(id__iexact=id)
+
+        donation = Donation(donor=user, amount=int(request.POST['amount']), charity=charity)
+        donation.save()
         return redirect("/giving/")
-    else:
-        notify.send(user, recipient=user, verb='Started creation of donation')
 
     charity_list = Charity.objects.all()
-    context = Context({'charity_list': charity_list})
-    return render(request, 'giving/new_donation.html', context)
+    c.update({'charity_list': charity_list})
+    return render_to_response("giving/new_donation.html", c)
