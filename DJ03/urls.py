@@ -5,7 +5,8 @@ import notifications.urls
 
 urlpatterns = [
     url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),
-    url(r'^giving/', include('giving.urls')),
+    url(r'^giving/', include('giving.urls', namespace="giving")),
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('giving.urls')),
+    url(r'^', include('giving.urls', namespace="giving")),
 ]
+
