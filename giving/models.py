@@ -12,6 +12,7 @@ class Charity(models.Model):
     class Meta:
         ordering = ['name']
         get_latest_by = 'founded_date'
+        verbose_name_plural = "charities"
 
     def __str__(self):
         return self.name
