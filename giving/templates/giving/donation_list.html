@@ -5,14 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<img src="/static/giving/images/background.jpg"/>
-
 <h2>Donation List</h2>
-<table>
+<table class="table">
     <tr>
         <th>Donor</th>
         <th>Charity</th>
-        <th>Amount</th>
+        <th style="text-align: right">Amount</th>
     </tr>
     {% for donation in donation_list %}
     <tr>
@@ -22,16 +20,16 @@
         <td>
             {{ donation.charity }}
         </td>
-        <td>
+        <td style="text-align: right">
             {{ donation.amount }}
         </td>
     </tr>
     {% empty %}
     <tr>
-        <td><em>There are currently no Donations recorded.</em></td>
+        <td colspan="999"><em>There are currently no Donations recorded.</em></td>
     </tr>
     {% endfor %}
 </table>
 
-<a href="/giving/newDonation">New Donation</a>
+<a href="/giving/donationNew">New Donation</a>
 {% endblock %}

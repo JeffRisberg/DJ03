@@ -23,6 +23,14 @@ def charity_list_view(request):
     return HttpResponse(output)
 
 
+def charity_detail_view(request, slug):
+    charity = Charity.objects.get(slug__iexact=slug)
+    template = loader.get_template('giving/charity_detail.html')
+    context = Context({'charity': charity})
+    output = template.render(context)
+    return HttpResponse(output)
+
+
 def donor_list_view(request):
     donor_list = Donor.objects.all()
     template = loader.get_template('giving/donor_list.html')
@@ -47,7 +55,7 @@ def donation_list_view(request):
     return HttpResponse(output)
 
 
-def new_donation_view(request):
+def donation_new_view(request):
     c = {}
     c.update(csrf(request))
     user = getattr(request, "user", None)
@@ -68,4 +76,4 @@ def new_donation_view(request):
 
     charity_list = Charity.objects.all()
     c.update({'charity_list': charity_list})
-    return render_to_response("giving/new_donation.html", c)
+    return render_to_response("giving/donation_new.html", c)
