@@ -2,6 +2,7 @@ from django.core.context_processors import csrf
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
+from django.views.generic import TemplateView
 
 from notifications.signals import notify
 
@@ -23,12 +24,11 @@ def charity_list_view(request):
     return HttpResponse(output)
 
 
-def charity_detail_view(request, slug):
-    charity = Charity.objects.get(slug__iexact=slug)
-    template = loader.get_template('giving/charity_detail.html')
-    context = Context({'charity': charity})
-    output = template.render(context)
-    return HttpResponse(output)
+class CharityDetailView(TemplateView):
+    template_name = 'giving/charity_detail.html'
+
+    def get_context_data(self, **kwargs):
+        return {'charity': Charity.objects.get(slug__iexact=kwargs['slug'])}
 
 
 def donor_list_view(request):
@@ -45,6 +45,13 @@ def donation_list_view(request):
     context = Context({'donation_list': donation_list})
     output = template.render(context)
     return HttpResponse(output)
+
+
+class DonationDetailView(TemplateView):
+    template_name = 'giving/donation_detail.html'
+
+    def get_context_data(self, **kwargs):
+        return {'donation': Donation.objects.get(id=kwargs['id'])}
 
 
 def donation_list_view(request):
