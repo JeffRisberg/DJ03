@@ -18,10 +18,7 @@ def index(request):
 
 
 class CharityListView(ListView):
-    # template_name = 'giving/charity_list.html'
-
-    def get_queryset(self, **kwargs):
-        return {'charity_list': Charity.objects.all()}
+    model = Charity
 
 
 class CharityDetailView(TemplateView):
@@ -32,17 +29,11 @@ class CharityDetailView(TemplateView):
 
 
 class DonorListView(ListView):
-    # template_name = 'giving/donor_list.html'
-
-    def get_queryset(self, **kwargs):
-        return {'donor_list': Donor.objects.all()}
+    model = Donor
 
 
 class DonationListView(ListView):
-    # template_name = 'giving/donation_list.html'
-
-    def get_queryset(self, **kwargs):
-        return {'donation_list': Donation.objects.all()}
+    model = Donation
 
 
 class DonationDetailView(TemplateView):
