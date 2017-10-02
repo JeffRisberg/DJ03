@@ -3,6 +3,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
 from django.views.generic import TemplateView
+from django.views.generic import ListView
 
 from notifications.signals import notify
 
@@ -16,10 +17,10 @@ def index(request):
     return HttpResponse(output)
 
 
-class CharityListView(TemplateView):
-    template_name = 'giving/charity_list.html'
+class CharityListView(ListView):
+    # template_name = 'giving/charity_list.html'
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self, **kwargs):
         return {'charity_list': Charity.objects.all()}
 
 
@@ -30,17 +31,17 @@ class CharityDetailView(TemplateView):
         return {'charity': Charity.objects.get(slug__iexact=kwargs['slug'])}
 
 
-class DonorListView(TemplateView):
-    template_name = 'giving/donor_list.html'
+class DonorListView(ListView):
+    # template_name = 'giving/donor_list.html'
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self, **kwargs):
         return {'donor_list': Donor.objects.all()}
 
 
-class DonationListView(TemplateView):
-    template_name = 'giving/donation_list.html'
+class DonationListView(ListView):
+    # template_name = 'giving/donation_list.html'
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self, **kwargs):
         return {'donation_list': Donation.objects.all()}
 
 
