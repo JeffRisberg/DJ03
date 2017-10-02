@@ -2,8 +2,7 @@ from django.core.context_processors import csrf
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
-from django.views.generic import TemplateView
-from django.views.generic import ListView
+from django.views.generic import TemplateView, ListView
 
 from notifications.signals import notify
 
