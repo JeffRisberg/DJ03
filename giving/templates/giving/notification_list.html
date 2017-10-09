@@ -27,6 +27,7 @@
     </p>
     <table class="table">
         <tr>
+            <th>Status</th>
             <th>When</th>
             <th>Actor/Verb</th>
             <th>Level</th>
@@ -34,6 +35,13 @@
         </tr>
         {% for notification in object_list %}
             <tr>
+                <td>
+                    {% if notification.unread %}
+                    Unead
+                    {% else %}
+                    Read
+                    {% endif %}
+                </td>
                 <td>
                     {{ notification.timesince }} ago
                 </td>
