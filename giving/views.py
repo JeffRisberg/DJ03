@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render_to_response
 from django.template import Context, loader
 from django.views.generic import TemplateView, ListView
 
+from notifications.models import Notification
 from notifications.signals import notify
 
 from .models import Charity, Donor, Donation
@@ -14,6 +15,26 @@ def index(request):
     context = Context()
     output = template.render(context)
     return HttpResponse(output)
+
+
+class NotificationListView(ListView):
+    template_name = 'giving/notification_list.html'
+    model = Notification
+
+    def get_queryset(self):
+        mode = self.kwargs['mode'] or 'all'
+        if mode == 'unread':
+            return self.request.user.notifications.unread()
+        elif mode == 'read':
+            return self.request.user.notifications.read()
+        else:
+            return self.request.user.notifications.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(NotificationListView, self).get_context_data(**kwargs)
+        mode = self.kwargs['mode'] or 'all'
+        context['mode'] = mode
+        return context
 
 
 class CharityListView(ListView):
